@@ -131,7 +131,7 @@ OPENAI_ENDPOINT = <your-azure-openai-embedding-endpoint>
 ### Catalog & Schemas
 ```sql
 CREATE CATALOG news_pipeline
-MANAGED LOCATION 'abfss://news-intelligence-container@newsintelligencestgac.dfs.core.windows.net/';
+MANAGED LOCATION 'abfss://<your-container>@<your-storage-account>.dfs.core.windows.net/';
 
 CREATE SCHEMA news_pipeline.bronze;
 CREATE SCHEMA news_pipeline.silver;
@@ -139,7 +139,7 @@ CREATE SCHEMA news_pipeline.gold;
 CREATE SCHEMA news_pipeline.monitoring;
 
 CREATE EXTERNAL VOLUME news_pipeline.bronze.raw_json_files
-LOCATION 'abfss://news-intelligence-container@newsintelligencestgac.dfs.core.windows.net/bronze/raw/';
+LOCATION 'abfss://<your-container>@<your-storage-account>.dfs.core.windows.net/bronze/raw/';
 ```
 
 ### Monitoring Table
