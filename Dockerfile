@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     && apt-get clean
-opt
+    
 USER airflow
 
 COPY requirements.txt .
