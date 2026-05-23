@@ -1,7 +1,0 @@
-apache-airflow-providers-databricks==7.15.0
-apache-airflow-providers-apache-kafka==1.14.0
-databricks-sdk==0.18.0
-pandas==2.1.4
-python-dotenv==1.0.0
-pydantic==2.5.0
-requests==2.32.0
