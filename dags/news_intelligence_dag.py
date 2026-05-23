@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.providers.databricks.operators.databricks import DatabricksSubmitRunOperator
-import os
 
 # Default arguments
 default_args = {
@@ -24,15 +23,10 @@ dag = DAG(
     tags=['news', 'databricks', 'kafka'],
 )
 
-# Databricks configuration
-databricks_host = os.getenv('DATABRICKS_HOST')
-databricks_token = os.getenv('DATABRICKS_TOKEN')
-
 # Task 1: Bronze Ingestion (NewsAPI + Kafka)
 bronze_task = DatabricksSubmitRunOperator(
     task_id='bronze_ingestion',
-    databricks_host=databricks_host,
-    databricks_token=databricks_token,
+    databricks_conn_id='databricks_default',
     existing_cluster_id='0502-130412-dpe6g4gr',
     notebook_task={
         'notebook_path': '/Workspace/news_pipeline/bronze/01_auto_loader_ingest',
@@ -48,8 +42,7 @@ bronze_task = DatabricksSubmitRunOperator(
 # Task 2: Silver Transformation (DLT Pipeline)
 silver_task = DatabricksSubmitRunOperator(
     task_id='silver_transformation',
-    databricks_host=databricks_host,
-    databricks_token=databricks_token,
+    databricks_conn_id='databricks_default',
     pipeline_task={
         'pipeline_id': 'news-intelligence-silver',  # Your DLT pipeline ID
     },
@@ -59,8 +52,7 @@ silver_task = DatabricksSubmitRunOperator(
 # Task 3: Gold Embedding (OpenAI Embeddings)
 gold_task = DatabricksSubmitRunOperator(
     task_id='gold_embedding',
-    databricks_host=databricks_host,
-    databricks_token=databricks_token,
+    databricks_conn_id='databricks_default',
     existing_cluster_id='0502-130412-dpe6g4gr',
     notebook_task={
         'notebook_path': '/Workspace/news_pipeline/gold/03_embedding_pipeline',
@@ -71,8 +63,7 @@ gold_task = DatabricksSubmitRunOperator(
 # Task 4: Log failure (calls the log_failure notebook)
 log_failure_task = DatabricksSubmitRunOperator(
     task_id = 'log_pipeline_failure',
-    databricks_host = databricks_host,
-    databricks_token = databricks_token,
+    databricks_conn_id='databricks_default',
     existing_cluster_id='0502-130412-dpe6g4gr',
     notebook_task={
         'notebook_path': '/Workspace/news_pipeline/utils/log_failure',
