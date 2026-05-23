@@ -1,5 +1,5 @@
 apache-airflow==2.8.1
-apache-airflow-providers-databricks==5.1.1
+apache-airflow-providers-databricks==7.15.0
 apache-airflow-providers-apache-kafka==1.2.2
 databricks-sdk==0.18.0
 pandas==2.1.4
